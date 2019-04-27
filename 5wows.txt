@@ -1,0 +1,119 @@
+//================================================================
+// SCRIPT FOR FIVE WOW'S ON ONE PCs
+// (modified from 4 wow on 2 pcs sample)
+// 
+// "Pause" key turns on/off hhkn
+// "Scroll Lock" toggles broadcast of every key vs keys beside
+//  w s a d .... movement keys and a few others (see below 'ExList')
+// 
+// Moorea@ymail.com
+//
+//================================================================
+//-----------------------------------------------------------
+// CTRL R WILL RENAME WOWS AFTER MANUAL LAUNCH
+//-----------------------------------------------------------
+<Hotkey ScrollLockOn Alt Ctrl R>
+    <SendPc Local>
+        <RenameWin "World of Warcraft" WoW1>
+        <RenameWin "World of Warcraft" WoW2>
+        <RenameWin "World of Warcraft" WoW3>
+        <RenameWin "World of Warcraft" WoW4>
+        <RenameWin "World of Warcraft" WoW5>
+//-----------------------------------------------------------
+// SUBROUTINE TO LAUNCH AND RENAME A COPY OF WOW.
+//-----------------------------------------------------------
+<Command Launch>
+   <SendPC %1%>
+      <Run "C:\mbox\_wow%2%_\WoW.exe">
+      <Wait 1000>
+      <RenameTargetWin wow%2%_hidden_dialog>
+      <WaitForWin "World of Warcraft" 5000>
+      <WaitForWinEnabled 5000>
+<Command Capture>
+   <SendPC %1%>
+     <RenameTargetWin WoW%2%>
+     <RemoveWinFrame>
+     <SetAffinity all>
+     <SetWinSize 1920 1080>
+     <SetWinPos %3% %4%>
+<Command LaunchAndRename>
+   <Launch %1% %2%>
+   <Capture %1% %2% %3% %4%>
+
+//-----------------------------------------------------------
+// HOTKEY TO LAUNCH AND RENAME THE WOW WINDOWS.
+//-----------------------------------------------------------
+<Hotkey ScrollLockOn Alt Ctrl L>
+   <SendPC Local>
+      <SetActiveWindowTrackingDelay 0>
+      <SetActiveWindowTracking on> 
+    <LaunchAndRename Local 1 0 0>
+    <LaunchAndRename Local 2 -1920 -720>
+    <LaunchAndRename Local 3 -1920 360>
+    <LaunchAndRename Local 4 -3840 -720>
+    <LaunchAndRename Local 5 -3840 360>
+// editing on the fly for when 1 wow dies somehow:
+<Hotkey ScrollLockOn Alt Ctrl T>
+    <TargetWin "World of Warcraft">
+    <Capture Local 1 -100 -300>
+
+//-----------------------------------------------------------
+// DEFINE A MAIL LABEL FOR EACH WOW
+//-----------------------------------------------------------
+<Label w0 Local SendWinM WoW1>
+<Label w1 Local SendWinM WoW2>
+<Label w2 Local SendWinM WoW3>
+<Label w3 Local SendWinM WoW4>
+<Label w4 Local SendWinM WoW5>
+//-----------------------------------------------------------
+// DEFINE HOTKEYS FOR ALL KEY COMBINATIONS THAT WILL GET
+// SENT TO ALL FOUR WOWS. ADD MORE KEY COMBO'S IF YOU WANT.
+//-----------------------------------------------------------
+
+// 9 key is rotated accross each 4 'slaves'
+<Hotkey 9>
+<Toggle>
+    <SendLabel w1>
+    <Key %trigger%>
+   <Toggle>
+     <SendLabel w2>
+     <Key %trigger%>
+   <Toggle>
+     <SendLabel w3>
+     <Key %trigger%>
+   <Toggle>
+     <SendLabel w4>
+     <Key %trigger%>
+// formation key (\)
+<MovementHotkey Oem5>
+      <SendLabel w3> <Key Down><Key E>
+      <SendLabel w1> <Key Q>
+      <SendLabel w2> <Key E>
+      <SendLabel w4> <Key Down>
+
+<KeyList ExList W, A, S, D, Q, E, 9, Enter, X, Space>
+<KeyList MyList Period, B-C, F-P, R, T-V, Y-Z, 0-8, F1-F12, Tab, Comma, Esc, Backspace, Minus, Plus, Oem1, Oem7, Oem4, Oem6, Oem2, Home>
+// turn on/off with pause:
+<hotkey pause>
+ <sendpc local>
+ <ToggleHotkeys>
+<Hotkey MyList; Shift MyList; Alt MyList; Ctrl MyList; Ctrl 9>
+<SendLabel w0, w1, w2, w3, w4>
+<Key %Trigger%>
+ 
+<MovementHotkey up, down, left, right, Space, Q, E>
+<SendLabel w0, w1, w2, w3, w4>
+<Key %Trigger%>
+<Hotkey ScrollLockOn ExList; ScrollLockOn Shift ExList; ScrollLockOn Alt ExList; ScrollLockOn Ctrl ExList>
+<SendLabel w0, w1, w2, w3, w4>
+<Key %Trigger%>
+ 
+//-----------------------------------------------------------
+// BROADCAST MOUSE CLICKS. HOLD DOWN OEM3 (ON U.S. KEYBOARDS,
+// THAT'S THE SQUIGGLE KEY IN UPPPER LEFT CORNER) WHEN YOU
+// WANT TO BROADCAST. - Need delays in hkn settings for it to work well
+//-----------------------------------------------------------
+<UseKeyAsModifier Oem3>
+<Hotkey Oem3 LButton, MButton, RButton, Button4, Button5>
+   <SendLabel w0, w1, w2, w3, w4>
+      <ClickMouse %TriggerMainKey% Both Window Scale NoRestore>
